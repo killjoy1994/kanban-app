@@ -4,8 +4,8 @@ import IconAdd from "../../assets/icon-add-task-mobile.svg";
 
 export default function BoardItem() {
   return (
-    <li className="hover:bg-blue-violet hover:bg-opacity-25 py-3 pl-8 w-[90%] rounded-r-full">
-      <button className="flex items-center gap-x-3 text-base font-semibold text-slate-500 hover:text-white">
+    <li className="hover:bg-blue-violet hover:bg-opacity-25 py-3 pl-8 w-[90%] rounded-r-full text-slate-500 hover:text-white">
+      <button className="flex items-center gap-x-3 text-base font-semibold ">
         <span>
           <img src={IconBoard} alt="" />
         </span>{" "}
