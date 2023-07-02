@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "./Modal";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 
 export default function AddNewTask() {
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   return (
-    <Modal>
+    <Modal className="py-10 rounded-lg px-8">
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
         initialValues={{
@@ -25,7 +26,7 @@ export default function AddNewTask() {
                 <label className="font-semibold text-slate-500" htmlFor="title">
                   Title
                 </label>
-                <Field className="border-2 border-slate-300 outline-blue-violet rounded-sm h-10 pl-2" type="text" name="title" />
+                <Field className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="title" />
                 <ErrorMessage name="title" />
               </div>
               {/* =========== DESCRIPTION ============ */}
@@ -34,7 +35,7 @@ export default function AddNewTask() {
                   Description
                 </label>
                 <Field
-                  className="border-2 border-slate-300 outline-blue-violet rounded-sm h-20  pl-2 pt-2 resize-none"
+                  className="border-2 border-slate-300 outline-blue-violet rounded-md h-20  pl-2 pt-2 resize-none"
                   as="textarea"
                   type="text"
                   name="description"
@@ -53,7 +54,7 @@ export default function AddNewTask() {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field className="border-2 border-slate-300 outline-blue-violet rounded-sm grow h-10 pl-2" type="text" name={`subtasks.${idx}`} />
+                            <Field className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -72,7 +73,7 @@ export default function AddNewTask() {
                           console.log("Initial Values: ", values);
                           arrayHelper.push("");
                         }}
-                        className="bg-cyan-100 py-1 rounded-full w-full mt-3"
+                        className="bg-blue-800 py-2 bg-opacity-10 text-opacity-80 hover:text-opacity-100 font-semibold text-blue-violet rounded-full w-full "
                       >
                         +Add New Subtask
                       </button>
@@ -85,10 +86,33 @@ export default function AddNewTask() {
                 <label className="font-semibold text-slate-500" htmlFor="status">
                   Status
                 </label>
-                <Field className="border-2 border-slate-300 outline-blue-violet rounded-sm h-10 pl-2" type="text" name="status" />
+                <div className="relative w-full">
+                  <Field
+                    className="w-full relative border-2 border-slate-300 appearance-none bg-transparent outline-blue-violet rounded-md h-9 pl-2"
+                    as="select"
+                    name="status"
+                    onClick={() => setIsSelectOpen((prevState) => !prevState)}
+                  >
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                    <option value="blue">Blue</option>
+                  </Field>
+                  <span className="absolute top-[40%] right-3">
+                    <svg
+                      className={isSelectOpen ? "transition duration-500 rotate-180" : "transition duration-500"}
+                      width="10"
+                      height="7"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
+                    </svg>
+                  </span>
+                </div>
                 <ErrorMessage name="status" />
               </div>
-              <button type="submit">Create Task</button>
+              <button className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2" type="submit">
+                Create Task
+              </button>
             </Form>
           );
         }}
