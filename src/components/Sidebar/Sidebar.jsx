@@ -4,6 +4,7 @@ import IconAdd from "../../assets/icon-add-task-mobile.svg";
 import BoardList from "./BoardList";
 import ButtonNewBoard from "./ButtonNewBoard";
 import ButtonToggle from "./ButtonToggle";
+import CreateBoard from "../Modals/CreateBoard";
 
 export default function Sidebar() {
   return (
@@ -16,6 +17,7 @@ export default function Sidebar() {
         <ButtonNewBoard />
       </div>
       <ButtonToggle />
+      <CreateBoard />
     </div>
   );
 }

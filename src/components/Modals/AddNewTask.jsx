@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { twMerge } from "tailwind-merge";
+import { customScrollbar } from "../../styles";
 
 export default function AddNewTask() {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+  const colors = ["Red", "Green", "Blue"];
   return (
-    <Modal className="py-10 rounded-lg px-8">
+    <Modal id="AddNewTask" className={twMerge("py-10 rounded-lg px-8", customScrollbar)}>
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
         initialValues={{
@@ -54,7 +58,7 @@ export default function AddNewTask() {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
+                            <Field  className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -93,13 +97,13 @@ export default function AddNewTask() {
                     name="status"
                     onClick={() => setIsSelectOpen((prevState) => !prevState)}
                   >
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
+                    {colors.map((color, idx) => {
+                      return <option key={idx} value={color}>{color}</option>;
+                    })}
                   </Field>
                   <span className="absolute top-[40%] right-3">
                     <svg
-                      className={isSelectOpen ? "transition duration-500 rotate-180" : "transition duration-500"}
+                      className={isSelectOpen ? "transition duration-400 rotate-180" : "transition duration-400"}
                       width="10"
                       height="7"
                       xmlns="http://www.w3.org/2000/svg"

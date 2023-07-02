@@ -1,11 +1,11 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-export default function Modal({children, className}) {
+export default function Modal({id, children, className}) {
   return (
     <div>
       {/* Open the modal using ID.showModal() method */}
-      <dialog id="my_modal_2" className="modal">
+      <dialog id={id} className="modal">
         <div method="dialog" className={twMerge("modal-box rounded-md", className)}>
           {children}
         </div>

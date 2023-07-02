@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LogoMobile from "../assets/logo-mobile.svg";
 import DarkLogo from "../assets/logo-dark.svg";
 import DownArrow from "../assets/icon-chevron-down.svg";
@@ -6,8 +6,10 @@ import UpArrow from "../assets/icon-chevron-up.svg";
 import IconAdd from "../assets/icon-add-task-mobile.svg";
 import IconDots from "../assets/icon-vertical-ellipsis.svg";
 import AddNewTask from "./Modals/AddNewTask";
+import ElipsDropdown from "./Elements/ElipsDropdown";
 
 export default function Navbar() {
+  const [dotsOpen, setDotsOpen] = useState(false);
   return (
     <header className="flex">
       <div className="pt-8 pb-10 md:w-[300px] pl-8 md:border-r border-b shrink-0 border-opacity-10">
@@ -27,18 +29,19 @@ export default function Navbar() {
           <h1 className="text-2xl font-bold">Platform Launch</h1>
         </div>
         <div className="flex items-center gap-x-2">
-          <button className="md:hidden py-2 px-4 rounded-full bg-blue-violet">
+          <button className="md:hidden py-2 px-4 rounded-full bg-blue-violet" onClick={() => window.AddNewTask.showModal()}>
             <img src={IconAdd} alt="" />
           </button>
-          <button className="btn hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80" onClick={() => window.my_modal_2.showModal()}>
+          <button
+            className="btn hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
+            onClick={() => window.AddNewTask.showModal()}
+          >
             <img className="h-2" src={IconAdd} alt="" />
             <span className="text-slate-50 font-bold">Add New Task </span>
           </button>
           {/* Modal */}
           <AddNewTask />
-          <button className="px-2 py-3 rounded-full hover:bg-cyan-400">
-            <img src={IconDots} alt="" />
-          </button>
+          <ElipsDropdown show={dotsOpen} setShow={setDotsOpen} />
         </div>
       </nav>
     </header>

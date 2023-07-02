@@ -1,0 +1,1 @@
+export const customScrollbar = "scrollbar scrollbar-rounded-[8px] scrollbar-w-[8px] scrollbar-h-[8px] scrollbar-thumb-slate-400 scrollbar-track-slate-200"
