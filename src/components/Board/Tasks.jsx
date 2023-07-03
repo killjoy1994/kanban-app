@@ -11,13 +11,6 @@ export default function Tasks() {
       <div className="w-[280px] shrink-0 flex flex-col gap-y-5">
         <TaskItem />
         <TaskItem />
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
-        <TaskItem />
       </div>
     </div>
   );

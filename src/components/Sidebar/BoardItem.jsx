@@ -1,15 +1,31 @@
-import React from "react";
-import IconBoard from "../../assets/icon-board.svg";
-import IconAdd from "../../assets/icon-add-task-mobile.svg";
+import React, { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { useDispatch } from "react-redux";
 
-export default function BoardItem() {
+export default function BoardItem({ id, name, isActive, setActiveBoard }) {
+  const dispatch = useDispatch()
   return (
-    <li className="hover:bg-blue-violet hover:bg-opacity-25 py-3 pl-8 w-[90%] rounded-r-full text-slate-500 hover:text-white">
-      <button className="flex items-center gap-x-3 text-base font-semibold ">
+    <li
+      className={twMerge(
+        "hover:bg-blue-violet hover:bg-opacity-25 py-3 pl-8 w-[90%] rounded-r-full text-slate-500 hover:text-white",
+        isActive ? "bg-blue-violet text-white" : ""
+      )}
+    >
+      <button
+        onClick={() => {
+          dispatch(setActiveBoard(id));
+        }}
+        className="flex w-full h-full items-center gap-x-3 text-base font-semibold "
+      >
         <span>
-          <img src={IconBoard} alt="" />
+          <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z"
+              fill={isActive ? "#fff" : "#828FA3"}
+            />
+          </svg>
         </span>{" "}
-        Platform Launch
+        {name}
       </button>
     </li>
   );
