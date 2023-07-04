@@ -24,10 +24,12 @@ const boardSlice = createSlice({
             board.isActive = false
           }
         })
+        state.activeBoard = state.boards.filter(board => board.isActive)
       }
 
     },
     setActiveNewestBoard: (state, action) => {
+      console.log("active board: ", action.payload)
       if (state.boards) {
         state.boards.map((board,idx) => {
           if(idx !== action.payload) {

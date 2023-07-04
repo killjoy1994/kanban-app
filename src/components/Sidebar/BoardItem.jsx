@@ -3,12 +3,12 @@ import { twMerge } from "tailwind-merge";
 import { useDispatch } from "react-redux";
 
 export default function BoardItem({ id, name, isActive, setActiveBoard }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <li
       className={twMerge(
-        "hover:bg-blue-violet hover:bg-opacity-25 py-3 pl-8 w-[90%] rounded-r-full text-slate-500 hover:text-white",
-        isActive ? "bg-blue-violet text-white" : ""
+        "hover:bg-opacity-30 py-3 pl-8 w-[90%] rounded-r-full text-slate-500 hover:text-white",
+        isActive ? "bg-blue-violet text-white" : "hover:bg-blue-violet"
       )}
     >
       <button

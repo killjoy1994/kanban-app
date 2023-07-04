@@ -3,9 +3,14 @@ import Modal from "./Modal";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import { twMerge } from "tailwind-merge";
 import { customScrollbar } from "../../styles";
+import { useSelector } from "react-redux";
 
 export default function AddNewTask() {
+  const { boards } = useSelector((state) => state.board);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+  let status = boards?.find(board => board.isActive)?.columns;
+  // console.log("FIltered: ", filteredColumn)
 
   const colors = ["Red", "Green", "Blue"];
   return (
@@ -58,7 +63,7 @@ export default function AddNewTask() {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field  className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
+                            <Field className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -97,8 +102,12 @@ export default function AddNewTask() {
                     name="status"
                     onClick={() => setIsSelectOpen((prevState) => !prevState)}
                   >
-                    {colors.map((color, idx) => {
-                      return <option key={idx} value={color}>{color}</option>;
+                    {status?.map((data, idx) => {
+                      return (
+                        <option key={idx} value={data.name}>
+                          {data.name}
+                        </option>
+                      );
                     })}
                   </Field>
                   <span className="absolute top-[40%] right-3">
