@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 
 export default function Navbar() {
   const [dotsOpen, setDotsOpen] = useState(false);
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false)
   const { boards } = useSelector((state) => state.board);
 
   const selectedBoard = boards?.find(board => board.isActive)
@@ -36,18 +37,18 @@ export default function Navbar() {
         <div className="flex items-center gap-x-2">
           {boards.length !== 0 && (
             <>
-              <button className="md:hidden py-2 px-4 rounded-full bg-blue-violet" onClick={() => window.AddNewTask.showModal()}>
+              <button className="md:hidden py-2 px-4 rounded-full bg-blue-violet" onClick={() => setShowAddTaskModal(true)}>
                 <img src={IconAdd} alt="" />
               </button>
               <button
                 className="btn hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
-                onClick={() => window.AddNewTask.showModal()}
+                onClick={() => setShowAddTaskModal(true)}
               >
                 <img className="h-2" src={IconAdd} alt="" />
                 <span className="text-slate-50 font-bold">Add New Task </span>
               </button>
               {/* Modal */}
-              <AddNewTask />
+              <AddNewTask show={showAddTaskModal} setShow={setShowAddTaskModal}/>
               <ElipsDropdown show={dotsOpen} setShow={setDotsOpen} />
             </>
           )}

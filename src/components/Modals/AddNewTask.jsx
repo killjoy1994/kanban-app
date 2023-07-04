@@ -3,28 +3,36 @@ import Modal from "./Modal";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import { twMerge } from "tailwind-merge";
 import { customScrollbar } from "../../styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask } from "../../redux/boardSlice";
 
-export default function AddNewTask() {
+export default function AddNewTask({ show, setShow }) {
+  const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-  let status = boards?.find(board => board.isActive)?.columns;
-  // console.log("FIltered: ", filteredColumn)
+  let status = boards?.find((board) => board.isActive)?.columns;
 
-  const colors = ["Red", "Green", "Blue"];
+  let activeBoardIdx = boards.findIndex((board) => board.isActive);
+
+  console.log("BOARDS: ", boards);
+
   return (
-    <Modal id="AddNewTask" className={twMerge("py-10 rounded-lg px-8", customScrollbar)}>
+    <Modal id="AddNewTask" setShowModal={setShow} className={twMerge("py-10 rounded-lg px-8", customScrollbar, show ? "modal-open" : "")}>
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
         initialValues={{
           title: "",
           description: "",
           subtasks: [""],
-          status: "",
+          status: status ? status[0]?.name : "",
         }}
-        onSubmit={(values) => {
+        enableReinitialize={true}
+        onSubmit={(values, { resetForm }) => {
           console.log("Values: ", values);
+          dispatch(addTask({ idx: activeBoardIdx, data: values }));
+          resetForm();
+          setShow(false)
         }}
       >
         {({ values }) => {
@@ -100,11 +108,12 @@ export default function AddNewTask() {
                     className="w-full relative border-2 border-slate-300 appearance-none bg-transparent outline-blue-violet rounded-md h-9 pl-2"
                     as="select"
                     name="status"
+                    id="status"
                     onClick={() => setIsSelectOpen((prevState) => !prevState)}
                   >
                     {status?.map((data, idx) => {
                       return (
-                        <option key={idx} value={data.name}>
+                        <option key={idx} value={data.name} label={data.name}>
                           {data.name}
                         </option>
                       );
