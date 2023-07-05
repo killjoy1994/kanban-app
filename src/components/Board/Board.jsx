@@ -1,7 +1,7 @@
 import React from "react";
-import EmptyBoard from "./EmptyBoard";
+import EmptyColumn from "./EmptyColumn";
 import NewColumn from "./NewColumn";
-import Tasks from "./Tasks";
+import Tasks from "./TasksColumn";
 import { twMerge } from "tailwind-merge";
 import { customScrollbar } from "../../styles";
 import { useSelector } from "react-redux";
@@ -20,7 +20,7 @@ export default function Board() {
               if(column.tasks) {
                 return <Tasks key={idx} columnName={column.name} tasks={column.tasks} />
               } else {
-                return <EmptyBoard key={idx} columnName={column?.name} />;
+                return <EmptyColumn key={idx} columnName={column?.name} />;
               }
               
             })}

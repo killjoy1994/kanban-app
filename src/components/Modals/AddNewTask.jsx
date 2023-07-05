@@ -5,8 +5,9 @@ import { twMerge } from "tailwind-merge";
 import { customScrollbar } from "../../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/boardSlice";
+import Arrow from "../Elements/Arrow";
 
-export default function AddNewTask({ show, setShow }) {
+export default function AddNewTask() {
   const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -15,10 +16,10 @@ export default function AddNewTask({ show, setShow }) {
 
   let activeBoardIdx = boards.findIndex((board) => board.isActive);
 
-  console.log("BOARDS: ", boards);
+  // console.log("BOARDS: ", boards);
 
   return (
-    <Modal id="AddNewTask" setShowModal={setShow} className={twMerge("py-10 rounded-lg px-8", customScrollbar, show ? "modal-open" : "")}>
+    <Modal id="AddNewTask" className={twMerge("py-10 rounded-lg px-8", customScrollbar)}>
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
         initialValues={{
@@ -32,7 +33,7 @@ export default function AddNewTask({ show, setShow }) {
           console.log("Values: ", values);
           dispatch(addTask({ idx: activeBoardIdx, data: values }));
           resetForm();
-          setShow(false)
+          window.AddNewTask.close();
         }}
       >
         {({ values }) => {
@@ -119,16 +120,7 @@ export default function AddNewTask({ show, setShow }) {
                       );
                     })}
                   </Field>
-                  <span className="absolute top-[40%] right-3">
-                    <svg
-                      className={isSelectOpen ? "transition duration-400 rotate-180" : "transition duration-400"}
-                      width="10"
-                      height="7"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4" />
-                    </svg>
-                  </span>
+                  <Arrow isModalOpen={isSelectOpen} />
                 </div>
                 <ErrorMessage name="status" />
               </div>

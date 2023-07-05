@@ -4,11 +4,11 @@ import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewBoard, setActiveNewestBoard } from "../../redux/boardSlice";
 
-export default function CreateBoard({showModal, setShowModal}) {
+export default function CreateBoard() {
   const {boards} = useSelector(state => state.board)
   const dispatch = useDispatch();
   return (
-    <Modal setShowModal={setShowModal} id="CreateBoard" className={showModal ? "modal-open" : ""}>
+    <Modal id="CreateBoard">
       <h2 className="mb-4 text-xl font-semibold">Add New Board</h2>
       <Formik
         initialValues={{
@@ -19,7 +19,7 @@ export default function CreateBoard({showModal, setShowModal}) {
         onSubmit={(values, {resetForm}) => {
           dispatch(addNewBoard(values))
           resetForm()
-          setShowModal(false)
+          window.CreateBoard.close()
         }}
       >
         {({ values }) => (
