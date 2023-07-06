@@ -1,4 +1,5 @@
 import { createSlice, current } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 // const loadedBoards = localStorage.getItem("data");
 // const loadedData = JSON.parse(loadedBoards);
@@ -19,6 +20,7 @@ const boardSlice = createSlice({
     addNewBoard: (state, action) => {
       const { boardName, columns } = action.payload;
       const board = {
+        id: uuidv4(),
         name: boardName,
         isActive: true,
         columns,
@@ -33,8 +35,8 @@ const boardSlice = createSlice({
     setActiveBoard: (state, action) => {
       console.log("BOARD PAYLOAD", action.payload);
       if (state.boards) {
-        state.boards.map((board, idx) => {
-          if (idx == action.payload) {
+        state.boards.map((board) => {
+          if (board.id == action.payload) {
             board.isActive = true;
           } else {
             board.isActive = false;
@@ -57,9 +59,9 @@ const boardSlice = createSlice({
     addTask: (state, action) => {
       const selectedColumn = action.payload.data.status;
       state.boards.map((board, idx) => {
-        if (idx == action.payload.idx) {
+        if (board.isActive) {
           const filteredIdx = board.columns.findIndex((column) => column.name == selectedColumn);
-          const filteredColumn = state.boards[idx].columns[filteredIdx];
+          const filteredColumn = board.columns[filteredIdx];
           if (filteredColumn.tasks) {
             filteredColumn.tasks = [...filteredColumn.tasks, action.payload.data];
           } else {
@@ -69,22 +71,22 @@ const boardSlice = createSlice({
       });
     },
     updateCurrentStatus: (state, action) => {
-      const boardIdx = state.boards.findIndex((board) => board.isActive);
-      const colIdx = state.boards[boardIdx].columns.findIndex((col) => col.name == action.payload.colName);
-      const updatedColIdx = state.boards[boardIdx].columns.findIndex((col) => col.name == action.payload.val);
-      const tasksIdx = state.boards[boardIdx].columns[colIdx].tasks.findIndex((task, idx) => idx == action.payload.id);
-      const selectedTask = state.boards[boardIdx].columns[colIdx].tasks[tasksIdx];
-      // console.log("ACTIVE BOARDDDD: ", current(state.boards[boardIdx].columns))
-      state.boards[boardIdx].columns.map((col, idx) => {
-        if(idx == colIdx) {
-          col.tasks = col.tasks.filter((task, idx) => idx !== tasksIdx)
-        } else if(idx == updatedColIdx) {
-          // console.log("HELLO: ", current(selectedTask))
-          col.tasks = [selectedTask]
-        }
-        console.log("COL: ", current(col))
-        return col
-      })
+      const { taskId, updatedColumnId, currentColumnId } = action.payload;
+      const selectedBoard = state.boards.find((board) => board.isActive);
+      const prevCol = selectedBoard.columns.find((col) => col.id === currentColumnId);
+      const updatedCol = selectedBoard.columns.find((col) => col.id == updatedColumnId);
+      // const tasksIdx = currentCol.tasks.findIndex((task) => task.id == taskId);
+      const selectedTask = prevCol?.tasks?.find((task) => task.id == taskId);
+      // console.log("TEST BOARDDDD1: ", current(selectedTask));
+      // console.log("TEST BOARDDDD2: ", current(prevCol));
+      // console.log("TEST BOARDDDD3: ", current(updatedCol));
+
+      prevCol.tasks = prevCol.tasks.filter((task) => task.id != taskId);
+      if (!updatedCol.tasks) {
+        updatedCol.tasks = [{ ...selectedTask, status: updatedCol.name }];
+      } else {
+        updatedCol.tasks = [...updatedCol.tasks, { ...selectedTask, status: updatedCol.name }];
+      }
     },
   },
 });

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewBoard, setActiveNewestBoard } from "../../redux/boardSlice";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateBoard() {
-  const {boards} = useSelector(state => state.board)
+  const { boards } = useSelector((state) => state.board);
   const dispatch = useDispatch();
   return (
     <Modal id="CreateBoard">
@@ -13,13 +14,12 @@ export default function CreateBoard() {
       <Formik
         initialValues={{
           boardName: "",
-          columns: [{ name: "" }],
+          columns: [{ name: "", id: uuidv4() }],
         }}
-        
-        onSubmit={(values, {resetForm}) => {
-          dispatch(addNewBoard(values))
-          resetForm()
-          window.CreateBoard.close()
+        onSubmit={(values, { resetForm }) => {
+          dispatch(addNewBoard(values));
+          resetForm();
+          window.CreateBoard.close();
         }}
       >
         {({ values }) => (
@@ -65,7 +65,7 @@ export default function CreateBoard() {
                       <button
                         type="button"
                         onClick={() => {
-                          arrayHelpers.push({name: ""});
+                          arrayHelpers.push({ name: "", id: uuidv4() });
                         }}
                         className="bg-blue-800 py-2 bg-opacity-10 text-opacity-80 hover:text-opacity-100 font-semibold text-blue-violet rounded-full w-full "
                       >
@@ -76,7 +76,11 @@ export default function CreateBoard() {
                 }}
               />
             </div>
-            <button onClick={() => dispatch(setActiveNewestBoard(boards.length))} className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2" type="submit">
+            <button
+              onClick={() => dispatch(setActiveNewestBoard(boards.length))}
+              className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2"
+              type="submit"
+            >
               Create Board
             </button>
           </Form>

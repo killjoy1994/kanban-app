@@ -9,8 +9,8 @@ export default function BoardList() {
   console.log("BOARDSSS: ", boards)
   return (
     <ul>
-      {boards.map((board, idx) => {
-        return <BoardItem name={board.name} id={idx} isActive={board.isActive} setActiveBoard={setActiveBoard} key={idx} />;
+      {boards.map((board) => {
+        return <BoardItem name={board.name} id={board.id} isActive={board.isActive} setActiveBoard={setActiveBoard} key={board.id} />;
       })}
     </ul>
   );

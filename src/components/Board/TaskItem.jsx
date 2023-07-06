@@ -1,7 +1,7 @@
 import React from "react";
 import TaskModal from "../Modals/TaskModal";
 
-export default function TaskItem({ title, subtasks, id, columnName, currentStatus, desc }) {
+export default function TaskItem({ title, columnName, subtasks, id, columnId, currentStatus, desc }) {
   const showModalHandler = () => {
     const modalId = `TaskItem${id}`
     window[modalId].showModal()
@@ -12,7 +12,7 @@ export default function TaskItem({ title, subtasks, id, columnName, currentStatu
         <span className="block font-semibold text-md">{title}</span>
         <span className="block text-sm text-slate-500 font-semibold">0 of {subtasks?.length} subtasks</span>
       </button>
-      <TaskModal data={{title, subtasks, id, columnName, currentStatus, desc}} />
+      <TaskModal data={{title, columnName, subtasks, id, columnId, currentStatus, desc}} />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { customScrollbar } from "../../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/boardSlice";
 import Arrow from "../Elements/Arrow";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddNewTask() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function AddNewTask() {
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
         initialValues={{
+          id: uuidv4(),
           title: "",
           description: "",
           subtasks: [""],
@@ -30,8 +32,8 @@ export default function AddNewTask() {
         }}
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
-          console.log("Values: ", values);
-          dispatch(addTask({ idx: activeBoardIdx, data: values }));
+          // console.log("Values: ", values);
+          dispatch(addTask({data: values }));
           resetForm();
           window.AddNewTask.close();
         }}
@@ -110,7 +112,7 @@ export default function AddNewTask() {
                     as="select"
                     name="status"
                     id="status"
-                    onClick={() => setIsSelectOpen((prevState) => !prevState)}
+                    // onClick={() => setIsSelectOpen((prevState) => !prevState)}
                   >
                     {status?.map((data, idx) => {
                       return (
