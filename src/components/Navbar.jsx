@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LogoMobile from "../assets/logo-mobile.svg";
 import DarkLogo from "../assets/logo-dark.svg";
 import DownArrow from "../assets/icon-chevron-down.svg";

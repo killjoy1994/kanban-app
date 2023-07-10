@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 const initialState = {
   // boards: loadedData.boards || [],
   boards: [],
-  selectedBoard: null,
-  selectedTask: null,
+  // selectedBoard: null,
+  // selectedTask: null,
 };
 
 const boardSlice = createSlice({
@@ -33,7 +33,7 @@ const boardSlice = createSlice({
       // ]);
     },
     setActiveBoard: (state, action) => {
-      console.log("BOARD PAYLOAD", action.payload);
+      // console.log("BOARD PAYLOAD", action.payload);
       if (state.boards) {
         state.boards.map((board) => {
           if (board.id == action.payload) {
@@ -46,7 +46,7 @@ const boardSlice = createSlice({
       }
     },
     setActiveNewestBoard: (state, action) => {
-      console.log("active board: ", action.payload);
+      // console.log("active board: ", action.payload);
       if (state.boards) {
         state.boards.map((board, idx) => {
           if (idx !== action.payload) {
@@ -71,15 +71,26 @@ const boardSlice = createSlice({
       });
     },
     updateCurrentStatus: (state, action) => {
+      console.log("ACTION PAYLOAD: ", action.payload);
       const { taskId, updatedColumnId, currentColumnId } = action.payload;
       const selectedBoard = state.boards.find((board) => board.isActive);
       const prevCol = selectedBoard.columns.find((col) => col.id === currentColumnId);
       const updatedCol = selectedBoard.columns.find((col) => col.id == updatedColumnId);
       // const tasksIdx = currentCol.tasks.findIndex((task) => task.id == taskId);
+      const checkedSubs = action.payload.checkedSubs;
       const selectedTask = prevCol?.tasks?.find((task) => task.id == taskId);
       // console.log("TEST BOARDDDD1: ", current(selectedTask));
       // console.log("TEST BOARDDDD2: ", current(prevCol));
       // console.log("TEST BOARDDDD3: ", current(updatedCol));
+
+      selectedTask.subtasks.map((sub) => {
+        if (checkedSubs.includes(sub.id)) {
+          sub.isDone = true;
+        } else {
+          sub.isDone = false;
+        }
+        return sub;
+      });
 
       prevCol.tasks = prevCol.tasks.filter((task) => task.id != taskId);
       if (!updatedCol.tasks) {

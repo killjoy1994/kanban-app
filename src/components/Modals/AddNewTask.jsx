@@ -6,7 +6,7 @@ import { customScrollbar } from "../../styles";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/boardSlice";
 import Arrow from "../Elements/Arrow";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddNewTask() {
   const dispatch = useDispatch();
@@ -27,13 +27,13 @@ export default function AddNewTask() {
           id: uuidv4(),
           title: "",
           description: "",
-          subtasks: [""],
+          subtasks: [{ name: "", isDone: false, id: uuidv4() }],
           status: status ? status[0]?.name : "",
         }}
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
           // console.log("Values: ", values);
-          dispatch(addTask({data: values }));
+          dispatch(addTask({ data: values }));
           resetForm();
           window.AddNewTask.close();
         }}
@@ -74,7 +74,11 @@ export default function AddNewTask() {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2" type="text" name={`subtasks.${idx}`} />
+                            <Field
+                              className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
+                              type="text"
+                              name={`subtasks.${idx}.name`}
+                            />
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -90,8 +94,8 @@ export default function AddNewTask() {
                       <button
                         type="button"
                         onClick={() => {
-                          console.log("Initial Values: ", values);
-                          arrayHelper.push("");
+                          // console.log("Initial Values: ", values);
+                          arrayHelper.push({ name: "", isDone: false, id: uuidv4() });
                         }}
                         className="bg-blue-800 py-2 bg-opacity-10 text-opacity-80 hover:text-opacity-100 font-semibold text-blue-violet rounded-full w-full "
                       >

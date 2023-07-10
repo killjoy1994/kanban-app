@@ -6,7 +6,7 @@ import { setActiveBoard } from "../../redux/boardSlice";
 
 export default function BoardList() {
   const { boards } = useSelector((state) => state.board);
-  console.log("BOARDSSS: ", boards)
+  // console.log("BOARDSSS: ", boards)
   return (
     <ul>
       {boards.map((board) => {
