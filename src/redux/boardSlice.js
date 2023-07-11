@@ -26,11 +26,6 @@ const boardSlice = createSlice({
         columns,
       };
       state.boards.push(board);
-      // localStorage.setItem("data", [
-      //   JSON.stringify({
-      //     boards: [board],
-      //   }),
-      // ]);
     },
     setActiveBoard: (state, action) => {
       // console.log("BOARD PAYLOAD", action.payload);
@@ -69,6 +64,16 @@ const boardSlice = createSlice({
           }
         }
       });
+    },
+    editBoard: (state, action) => {
+      // console.log("EDITT")
+      let board = state.boards.find((board) => board.isActive);
+      board.name = action.payload.boardName;
+      board.columns = action.payload.columns;
+    },
+    updateColumn: (state, action) => {
+      const board = state.boards.find((board) => board.isActive);
+      board.columns = action.payload.columns;
     },
     updateTask: (state, action) => {
       let data = action.payload.data;
@@ -119,5 +124,7 @@ const boardSlice = createSlice({
   },
 });
 
-export const { addNewBoard, setActiveBoard, setActiveNewestBoard, addTask, updateTask, deleteTask, updateCurrentStatus } = boardSlice.actions;
+export const { addNewBoard, setActiveBoard, setActiveNewestBoard, editBoard, updateColumn, addTask, updateTask, deleteTask, updateCurrentStatus } =
+  boardSlice.actions;
+
 export default boardSlice.reducer;

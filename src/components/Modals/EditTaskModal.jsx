@@ -40,6 +40,7 @@ export default function EditTask({ id, columnId, taskModal }) {
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
           console.log("Values: ", values);
+          let updatedColumn
           dispatch(updateTask({ data: values, columnId: column.id, taskId: task.id }));
           resetForm();
           window[editModalId].close();

@@ -118,9 +118,9 @@ export default function AddNewTask() {
                     id="status"
                     // onClick={() => setIsSelectOpen((prevState) => !prevState)}
                   >
-                    {status?.map((data, idx) => {
+                    {status?.map((data) => {
                       return (
-                        <option key={idx} value={data.name} label={data.name}>
+                        <option key={data.id} value={data.name} label={data.name}>
                           {data.name}
                         </option>
                       );

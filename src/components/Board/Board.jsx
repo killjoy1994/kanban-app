@@ -6,6 +6,8 @@ import { twMerge } from "tailwind-merge";
 import { customScrollbar } from "../../styles";
 import { useSelector } from "react-redux";
 import NoBoards from "./NoBoards";
+import AddColumn from "../Modals/AddNewColumn";
+import EditBoard from "../Modals/EditBoard";
 
 export default function Board() {
   const { boards } = useSelector((state) => state.board);
@@ -34,6 +36,8 @@ export default function Board() {
             }
           })}
           <NewColumn />
+          <AddColumn />
+
         </div>
       ) : (
         <NoBoards />

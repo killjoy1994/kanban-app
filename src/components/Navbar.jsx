@@ -8,11 +8,12 @@ import IconDots from "../assets/icon-vertical-ellipsis.svg";
 import AddNewTask from "./Modals/AddNewTask";
 import ElipsDropdown from "./Elements/ElipsDropdown";
 import { useSelector } from "react-redux";
+import EditBoard from "./Modals/EditBoard";
 
 export default function Navbar() {
   const [dotsOpen, setDotsOpen] = useState(false);
   const { boards } = useSelector((state) => state.board);
-  const selectedBoard = boards?.find(board => board.isActive)
+  const selectedBoard = boards?.find((board) => board.isActive);
 
   return (
     <header className="flex">
@@ -47,7 +48,8 @@ export default function Navbar() {
               </button>
               {/* Modal */}
               <AddNewTask />
-              <ElipsDropdown show={dotsOpen} setShow={setDotsOpen} name="Board"/>
+              <EditBoard />
+              <ElipsDropdown show={dotsOpen} setShow={setDotsOpen} name="Board" />
             </>
           )}
         </div>
