@@ -8,7 +8,7 @@ import { addTask, updateTask } from "../../redux/boardSlice";
 import Arrow from "../Elements/Arrow";
 import { v4 as uuidv4 } from "uuid";
 
-export default function EditTask({ id, columnId, onForce, taskModal }) {
+export default function EditTask({ id, columnId, taskModal }) {
   const editModalId = `EditTask${id}`;
   const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
@@ -41,7 +41,6 @@ export default function EditTask({ id, columnId, onForce, taskModal }) {
         onSubmit={(values, { resetForm }) => {
           console.log("Values: ", values);
           dispatch(updateTask({ data: values, columnId: column.id, taskId: task.id }));
-          // onForce({});
           resetForm();
           window[editModalId].close();
           window[taskModal].close();

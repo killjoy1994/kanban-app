@@ -3,7 +3,7 @@ import Circle from "../Elements/Circle";
 import TaskModal from "../Modals/TaskModal";
 import EditTask from "../Modals/EditTaskModal";
 
-export default function Tasks({ columnId, columnName, tasks, onForce }) {
+export default function Tasks({ columnId, columnName, tasks }) {
   return (
     <div>
       <div className="mb-5 flex items-center gap-x-3">
@@ -27,8 +27,8 @@ export default function Tasks({ columnId, columnName, tasks, onForce }) {
                   {subChecked} of {task.subtasks?.length} subtasks
                 </span>
               </button>
-              <TaskModal id={task.id} columnId={columnId} />
-              <EditTask taskModal={`TaskItem${task.id}`} id={task.id} columnId={columnId} onForce={onForce} />
+              <TaskModal id={task.id} columnId={columnId} task={task} />
+              <EditTask taskModal={`TaskItem${task.id}`} id={task.id} columnId={columnId} />
             </div>
           );
         })}

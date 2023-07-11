@@ -7,19 +7,21 @@ import Arrow from "../Elements/Arrow";
 import { deleteTask, updateCurrentStatus } from "../../redux/boardSlice";
 import { twMerge } from "tailwind-merge";
 
-export default function TaskModal({ id, columnId }) {
+export default function TaskModal({ id, columnId, task }) {
   const modalId = `TaskItem${id}`;
   const editModalId = `EditTask${id}`;
   const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
   const board = boards.find((board) => board.isActive);
   const column = board.columns.find((col) => col.id === columnId);
-  const task = column?.tasks.find((task) => task.id === id);
+  const filteredTask = column.tasks.find((task) => task.id === id);
 
   const [selectedStatus, setSelectedStatus] = useState(columnId);
-  const [checkedSubtasks, setCheckedSubtasks] = useState([...task.subtasks]);
+  const [checkedSubtasks, setCheckedSubtasks] = useState([...filteredTask.subtasks]);
 
-  // console.log("filteredTask: ", checkedSubtasks);
+  useEffect(() => {
+    setCheckedSubtasks(filteredTask.subtasks);
+  }, [boards]);
 
   const [showElips, setShowElips] = useState(false);
   // const [selectedStatus, selSelectedStatus] = useState(filteredTask?.status);
@@ -55,7 +57,7 @@ export default function TaskModal({ id, columnId }) {
     <Modal id={modalId} setShowElips={setShowElips}>
       <div className="flex flex-col gap-y-3">
         <div className="flex justify-between items-center ">
-          <h2 className="text-xl font-semibold">{task.title}</h2>
+          <h2 className="text-xl font-semibold">{filteredTask.title}</h2>
           <ElipsDropdown
             onDelete={() => dispatch(deleteTask({ taskId: id, columnId: columnId }))}
             parentModal={editModalId}
@@ -66,7 +68,7 @@ export default function TaskModal({ id, columnId }) {
             name="Task"
           />
         </div>
-        <p className="text-sm text-slate-500 ">{task.description.trim() !== "" ? task.description : "No description"}</p>
+        <p className="text-sm text-slate-500 ">{filteredTask.description.trim() !== "" ? filteredTask.description : "No description"}</p>
         <div className=" text-sm text-slate-500 flex flex-col gap-y-2">
           <p>Subtasks ({`${checkedSubtasksTotal} of ${checkedSubtasks.length}`})</p>
           {!checkedSubtasks?.length > 0

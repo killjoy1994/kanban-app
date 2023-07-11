@@ -1,14 +1,14 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
-// const loadedBoards = localStorage.getItem("data");
-// const loadedData = JSON.parse(loadedBoards);
+const loadedBoards = localStorage.getItem("boards");
+const loadedData = JSON.parse(loadedBoards);
 
 // console.log("LOADED: ", loadedData);
 
 const initialState = {
-  // boards: loadedData.boards || [],
-  boards: [],
+  boards: loadedData || [],
+  // boards: [],
   // selectedBoard: null,
   // selectedTask: null,
 };
@@ -79,16 +79,16 @@ const boardSlice = createSlice({
       // column = { ...column, tasks: { ...data } };
       let index = column.tasks.findIndex((task) => task.id == action.payload.taskId);
       column.tasks[index] = data;
+      column.tasks[index].subtasks = data.subtasks;
 
       console.log("TASK: ", current(board));
     },
     deleteTask: (state, action) => {
       console.log("HALLOOOOO");
       const board = state.boards.find((board) => board.isActive);
-      const column = board.columns.find((col) => col.id === action.payload.columnId);
+      const columnIdx = board.columns.findIndex((col) => col.id === action.payload.columnId);
 
-      column.tasks.filter((task) => task.id != action.payload.taskId);
-      return;
+      board.columns[columnIdx].tasks = board.columns[columnIdx].tasks.filter((task) => task.id != action.payload.taskId);
     },
     updateCurrentStatus: (state, action) => {
       // console.log("ACTION PAYLOAD: ", action.payload);
