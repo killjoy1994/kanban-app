@@ -1,6 +1,9 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { deleteTask } from "../../redux/boardSlice";
+import TaskModal from "../Modals/TaskModal";
 
-export default function ElipsDropdown({ show, setShow, name }) {
+export default function ElipsDropdown({ parentModal, taskModal, id, show, setShow, name, onDelete }) {
   return (
     <>
       <div className="relative z-[999]">
@@ -19,8 +22,27 @@ export default function ElipsDropdown({ show, setShow, name }) {
           <>
             <div className="fixed z-[100] top-0 left-0 right-0 bottom-0" onClick={() => setShow((prevState) => !prevState)}></div>
             <div className=" bg-white shadow-lg absolute right-[50%] top-14 rounded-md flex flex-col p-4 w-40">
-              <button className="text-start text-slate-500 font-medium hover:text-opacity-80">Edit {name}</button>
-              <button className="text-start font-medium text-red-600 hover:text-opacity-80">Delete {name}</button>
+              <button
+                onClick={() => {
+                  // console.log("ID:", id)
+                  window[parentModal].close();
+                  window[id].showModal();
+                }}
+                className="text-start text-slate-500 relative z-[999] font-medium hover:text-opacity-80"
+              >
+                Edit {name}
+              </button>
+              <button
+                onClick={() => {
+                  onDelete();
+                  window[parentModal].close();
+                  window[taskModal].close();
+
+                }}
+                className="text-start relative z-[999] font-medium text-red-600 hover:text-opacity-80"
+              >
+                Delete {name}
+              </button>
             </div>
           </>
         )}

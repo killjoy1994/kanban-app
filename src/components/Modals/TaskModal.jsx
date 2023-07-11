@@ -4,10 +4,12 @@ import Testmodal from "./Testmodal";
 import ElipsDropdown from "../Elements/ElipsDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import Arrow from "../Elements/Arrow";
-import { updateCurrentStatus } from "../../redux/boardSlice";
+import { deleteTask, updateCurrentStatus } from "../../redux/boardSlice";
 import { twMerge } from "tailwind-merge";
 
 export default function TaskModal({ id, columnId }) {
+  const modalId = `TaskItem${id}`;
+  const editModalId = `EditTask${id}`;
   const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
   const board = boards.find((board) => board.isActive);
@@ -29,10 +31,7 @@ export default function TaskModal({ id, columnId }) {
     // dispatch(updateCurrentStatus({ taskId: id, updatedColumnId: e.target.value, currentColumnId: column.id }));
   };
 
-  // let status = boards?.find((board) => board.isActive)?.columns;
-
   const onSaveHandler = () => {
-    const modalId = `TaskItem${id}`;
     const checkedSubtaskIds = checkedSubtasks.filter((sub) => sub.isDone).map((data) => data.id);
 
     dispatch(updateCurrentStatus({ taskId: id, updatedColumnId: selectedStatus, currentColumnId: column.id, checkedSubs: checkedSubtaskIds }));
@@ -53,11 +52,19 @@ export default function TaskModal({ id, columnId }) {
   const checkedSubtasksTotal = checkedSubtasks?.filter((subtask) => subtask.isDone)?.length;
 
   return (
-    <Modal id={`TaskItem${id}`}>
+    <Modal id={modalId} setShowElips={setShowElips}>
       <div className="flex flex-col gap-y-3">
         <div className="flex justify-between items-center ">
           <h2 className="text-xl font-semibold">{task.title}</h2>
-          <ElipsDropdown onEdit={() => {}} onDelete={(id) => dispatch(deleteTask(id))} show={showElips} setShow={setShowElips} name="Task" />
+          <ElipsDropdown
+            onDelete={() => dispatch(deleteTask({ taskId: id, columnId: columnId }))}
+            parentModal={editModalId}
+            taskModal={modalId}
+            id={editModalId}
+            show={showElips}
+            setShow={setShowElips}
+            name="Task"
+          />
         </div>
         <p className="text-sm text-slate-500 ">{task.description.trim() !== "" ? task.description : "No description"}</p>
         <div className=" text-sm text-slate-500 flex flex-col gap-y-2">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyColumn from "./EmptyColumn";
 import NewColumn from "./NewColumn";
 import Tasks from "./Tasks";
@@ -10,7 +10,8 @@ import NoBoards from "./NoBoards";
 export default function Board() {
   const { boards } = useSelector((state) => state.board);
   const selectedBoard = boards?.find((board) => board.isActive);
-  // console.log("BOARDSS: ", boards)
+  console.log("BOARDSS: ", boards)
+  const [, forceUpdate] = useState();
   
 
   return (
@@ -19,7 +20,7 @@ export default function Board() {
         <div className="flex px-6 py-5 md:min-w-[100vw] h-full gap-x-5">
           {selectedBoard?.columns?.map((column) => {
             if (column.tasks?.length > 0) {
-              return <Tasks columnId={column.id} columnName={column.name} key={column.id} tasks={column.tasks} />;
+              return <Tasks onForce={forceUpdate} columnId={column.id} columnName={column.name} key={column.id} tasks={column.tasks} />;
             } else {
               return <EmptyColumn key={column.id} columnName={column.name} id={column.id} />;
             }

@@ -70,8 +70,28 @@ const boardSlice = createSlice({
         }
       });
     },
+    updateTask: (state, action) => {
+      let data = action.payload.data;
+      let board = state.boards.find((board) => board.isActive);
+      let column = board.columns.find((col) => col.id === action.payload.columnId);
+      // let task = column.tasks.find((task) => task.id === action.payload.taskId);
+      // task = data;
+      // column = { ...column, tasks: { ...data } };
+      let index = column.tasks.findIndex((task) => task.id == action.payload.taskId);
+      column.tasks[index] = data;
+
+      console.log("TASK: ", current(board));
+    },
+    deleteTask: (state, action) => {
+      console.log("HALLOOOOO");
+      const board = state.boards.find((board) => board.isActive);
+      const column = board.columns.find((col) => col.id === action.payload.columnId);
+
+      column.tasks.filter((task) => task.id != action.payload.taskId);
+      return;
+    },
     updateCurrentStatus: (state, action) => {
-      console.log("ACTION PAYLOAD: ", action.payload);
+      // console.log("ACTION PAYLOAD: ", action.payload);
       const { taskId, updatedColumnId, currentColumnId } = action.payload;
       const selectedBoard = state.boards.find((board) => board.isActive);
       const prevCol = selectedBoard.columns.find((col) => col.id === currentColumnId);
@@ -79,9 +99,6 @@ const boardSlice = createSlice({
       // const tasksIdx = currentCol.tasks.findIndex((task) => task.id == taskId);
       const checkedSubs = action.payload.checkedSubs;
       const selectedTask = prevCol?.tasks?.find((task) => task.id == taskId);
-      // console.log("TEST BOARDDDD1: ", current(selectedTask));
-      // console.log("TEST BOARDDDD2: ", current(prevCol));
-      // console.log("TEST BOARDDDD3: ", current(updatedCol));
 
       selectedTask.subtasks.map((sub) => {
         if (checkedSubs.includes(sub.id)) {
@@ -102,5 +119,5 @@ const boardSlice = createSlice({
   },
 });
 
-export const { addNewBoard, setActiveBoard, setActiveNewestBoard, addTask, updateCurrentStatus } = boardSlice.actions;
+export const { addNewBoard, setActiveBoard, setActiveNewestBoard, addTask, updateTask, deleteTask, updateCurrentStatus } = boardSlice.actions;
 export default boardSlice.reducer;

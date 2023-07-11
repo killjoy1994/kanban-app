@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Circle from "../Elements/Circle";
 import TaskModal from "../Modals/TaskModal";
+import EditTask from "../Modals/EditTaskModal";
 
-export default function Tasks({ columnId, columnName, tasks }) {
-  // console.log("TASKS: ", tasks);
+export default function Tasks({ columnId, columnName, tasks, onForce }) {
   return (
     <div>
       <div className="mb-5 flex items-center gap-x-3">
@@ -22,9 +22,13 @@ export default function Tasks({ columnId, columnName, tasks }) {
                 className="bg-white p-5 w-full rounded-md shadow-lg text-start"
               >
                 <span className="block font-semibold text-md">{task.title}</span>
-                <span className="block text-sm text-slate-500 font-semibold"> {subChecked} of {task.subtasks?.length} subtasks</span>
+                <span className="block text-sm text-slate-500 font-semibold">
+                  {" "}
+                  {subChecked} of {task.subtasks?.length} subtasks
+                </span>
               </button>
               <TaskModal id={task.id} columnId={columnId} />
+              <EditTask taskModal={`TaskItem${task.id}`} id={task.id} columnId={columnId} onForce={onForce} />
             </div>
           );
         })}
