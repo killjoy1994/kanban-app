@@ -71,6 +71,10 @@ const boardSlice = createSlice({
       board.name = action.payload.boardName;
       board.columns = action.payload.columns;
     },
+    deleteBoard: (state, action) => {
+      console.log("HALLO", action.payload)
+      state.boards = state.boards.filter((board) => board.id != action.payload);
+    },
     updateColumn: (state, action) => {
       const board = state.boards.find((board) => board.isActive);
       board.columns = action.payload.columns;
@@ -124,7 +128,17 @@ const boardSlice = createSlice({
   },
 });
 
-export const { addNewBoard, setActiveBoard, setActiveNewestBoard, editBoard, updateColumn, addTask, updateTask, deleteTask, updateCurrentStatus } =
-  boardSlice.actions;
+export const { 
+  addNewBoard, 
+  setActiveBoard, 
+  setActiveNewestBoard, 
+  editBoard, 
+  deleteBoard, 
+  updateColumn, 
+  addTask, 
+  updateTask, 
+  deleteTask, 
+  updateCurrentStatus 
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

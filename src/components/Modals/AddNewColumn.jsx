@@ -5,22 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNewBoard, setActiveNewestBoard, updateColumn } from "../../redux/boardSlice";
 import { v4 as uuidv4 } from "uuid";
 import { twMerge } from "tailwind-merge";
+import * as Yup from "yup";
+
+const columnSchema = Yup.object().shape({
+  columns: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("required"),
+    })
+  ),
+});
 
 export default function AddColumn() {
   const { boards } = useSelector((state) => state.board);
   let board = boards.find((board) => board.isActive);
   const dispatch = useDispatch();
-  console.log(board);
+  console.log("BOARD: ", board);
   return (
     <Modal id="AddColumn">
       <h2 className="mb-4 text-xl font-semibold">Add New Column</h2>
       <Formik
         initialValues={{
-          boardName: board.name,
+          boardName: board?.name,
           columns: board?.columns,
         }}
+        validationSchema={columnSchema}
+        enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
-            console.log("values: ", values)
+          console.log("values: ", values);
           dispatch(updateColumn(values));
           // resetForm();
           window.AddColumn.close();
@@ -50,16 +61,19 @@ export default function AddColumn() {
                 render={(arrayHelpers) => {
                   return (
                     <div className="flex flex-col gap-y-3">
-                      {values.columns.map((task, idx) => (
+                      {values?.columns?.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field
-                              className={twMerge("border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2", idx == 0 ? "": "")}
-                              type="text"
-                              name={`columns.${idx}.name`}
-                              disabled={idx === 0}
-                            />
-                            {values.columns.length > 1 && (
+                            <div className="relative w-full">
+                              <Field
+                                className={twMerge("border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2", idx == 0 ? "" : "")}
+                                type="text"
+                                name={`columns.${idx}.name`}
+                                disabled={idx === 0}
+                              />
+                              <ErrorMessage component="span" className="absolute right-[10px] top-[6px] font-semibold text-red-400" name={`columns.${idx}.name`} />
+                            </div>
+                            {values?.columns?.length > 1 && (
                               <button
                                 className={idx == 0 ? "opacity-0" : ""}
                                 type="button"
@@ -78,7 +92,6 @@ export default function AddColumn() {
                               </button>
                             )}
                           </div>
-                          <ErrorMessage name="title" />
                         </div>
                       ))}
                       <button
@@ -96,7 +109,7 @@ export default function AddColumn() {
               />
             </div>
             <button
-            //   onClick={() => dispatch(setActiveNewestBoard(boards.length))}
+              //   onClick={() => dispatch(setActiveNewestBoard(boards.length))}
               className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2"
               type="submit"
             >

@@ -2,8 +2,18 @@ import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import React, { useState } from "react";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewBoard, setActiveNewestBoard } from "../../redux/boardSlice";
+import { addNewBoard, setActiveBoard, setActiveNewestBoard } from "../../redux/boardSlice";
 import { v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
+
+const BoardSchema = Yup.object().shape({
+  boardName: Yup.string().min(2, "too short").required("required"),
+  columns: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("required"),
+    })
+  ),
+});
 
 export default function CreateBoard() {
   const { boards } = useSelector((state) => state.board);
@@ -16,8 +26,10 @@ export default function CreateBoard() {
           boardName: "",
           columns: [{ name: "", id: uuidv4() }],
         }}
+        validationSchema={BoardSchema}
         onSubmit={(values, { resetForm }) => {
           dispatch(addNewBoard(values));
+          dispatch(setActiveNewestBoard(boards.length));
           resetForm();
           window.CreateBoard.close();
         }}
@@ -28,8 +40,10 @@ export default function CreateBoard() {
               <label className="font-semibold text-slate-500" htmlFor="boardName">
                 Name
               </label>
-              <Field className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="boardName" />
-              <ErrorMessage name="boardName" />
+              <div className="w-full relative">
+                <Field className="border-2 w-full border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="boardName" />
+                <ErrorMessage className="absolute right-[10px] top-[6px] font-semibold text-red-500" name="boardName" component="span" />
+              </div>
             </div>
             <div>
               <label className="font-semibold text-slate-500" htmlFor="columns">
@@ -43,11 +57,18 @@ export default function CreateBoard() {
                       {values.columns.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field
-                              className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
-                              type="text"
-                              name={`columns.${idx}.name`}
-                            />
+                            <div className="w-full relative">
+                              <Field
+                                className="border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
+                                type="text"
+                                name={`columns.${idx}.name`}
+                              />
+                              <ErrorMessage
+                                className="absolute right-[10px] top-[6px] font-semibold text-red-500"
+                                name={`columns.${idx}.name`}
+                                component="span"
+                              />
+                            </div>
                             {values.columns.length > 1 && (
                               <button type="button" onClick={() => arrayHelpers.remove(idx)}>
                                 <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
@@ -59,7 +80,6 @@ export default function CreateBoard() {
                               </button>
                             )}
                           </div>
-                          <ErrorMessage name="title" />
                         </div>
                       ))}
                       <button
@@ -76,11 +96,7 @@ export default function CreateBoard() {
                 }}
               />
             </div>
-            <button
-              onClick={() => dispatch(setActiveNewestBoard(boards.length))}
-              className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2"
-              type="submit"
-            >
+            <button className="bg-blue-violet rounded-full text-white hover:bg-opacity-90 mt-4 py-2" type="submit">
               Create Board
             </button>
           </Form>

@@ -7,7 +7,7 @@ export default function Tasks({ columnId, columnName, tasks }) {
   return (
     <div>
       <div className="mb-5 flex items-center gap-x-3">
-        <Circle /> <span className="text-slate-500 tracking-[2px] font-semibold">{columnName} (2)</span>
+        <Circle /> <span className="text-slate-500 tracking-[2px] font-semibold">{columnName} ({tasks?.length})</span>
       </div>
       <div className="w-[280px] shrink-0 flex flex-col gap-y-5">
         {tasks?.map((task) => {

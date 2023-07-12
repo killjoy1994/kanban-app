@@ -7,13 +7,15 @@ import IconAdd from "../assets/icon-add-task-mobile.svg";
 import IconDots from "../assets/icon-vertical-ellipsis.svg";
 import AddNewTask from "./Modals/AddNewTask";
 import ElipsDropdown from "./Elements/ElipsDropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EditBoard from "./Modals/EditBoard";
+import { deleteBoard, setActiveBoard } from "../redux/boardSlice";
 
 export default function Navbar() {
   const [dotsOpen, setDotsOpen] = useState(false);
   const { boards } = useSelector((state) => state.board);
   const selectedBoard = boards?.find((board) => board.isActive);
+  const dispatch = useDispatch();
 
   return (
     <header className="flex">
@@ -49,7 +51,10 @@ export default function Navbar() {
               {/* Modal */}
               <AddNewTask />
               <EditBoard />
-              <ElipsDropdown show={dotsOpen} setShow={setDotsOpen} name="Board" />
+              <ElipsDropdown show={dotsOpen} onDelete={() => {
+                dispatch(deleteBoard(selectedBoard.id))
+                dispatch(setActiveBoard(boards[boards.length - 2].id))
+              }} setShow={setDotsOpen} name="Board" />
             </>
           )}
         </div>

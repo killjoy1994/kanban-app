@@ -4,6 +4,16 @@ import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { editBoard } from "../../redux/boardSlice";
+import * as Yup from "yup";
+
+const BoardSchema = Yup.object().shape({
+  boardName: Yup.string().min(3, "too short!").required("required"),
+  columns: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("required"),
+    })
+  ),
+});
 
 export default function EditBoard() {
   const { boards } = useSelector((state) => state.board);
@@ -14,9 +24,10 @@ export default function EditBoard() {
       <h2 className="mb-4 text-xl font-semibold">Edit Board</h2>
       <Formik
         initialValues={{
-          boardName: board.name,
-          columns: board.columns,
+          boardName: board?.name,
+          columns: board?.columns,
         }}
+        validationSchema={BoardSchema}
         onSubmit={(values) => {
           dispatch(editBoard(values));
           window.EditBoard.close();
@@ -40,7 +51,7 @@ export default function EditBoard() {
                 render={(arrayHelpers) => {
                   return (
                     <div className="flex flex-col gap-y-3">
-                      {values.columns.map((task, idx) => (
+                      {values?.columns?.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
                             <Field
@@ -59,7 +70,7 @@ export default function EditBoard() {
                               </button>
                             )}
                           </div>
-                          <ErrorMessage name="title" />
+                          <ErrorMessage name={`columns.${idx}.name`} component="span" />
                         </div>
                       ))}
                       <button

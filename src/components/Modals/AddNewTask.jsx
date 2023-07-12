@@ -7,6 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../../redux/boardSlice";
 import Arrow from "../Elements/Arrow";
 import { v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
+
+const TaskSchema = Yup.object().shape({
+  title: Yup.string().min(4, "too short!").required("required"),
+  subtasks: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("required"),
+    })
+  ),
+});
 
 export default function AddNewTask() {
   const dispatch = useDispatch();
@@ -30,6 +40,7 @@ export default function AddNewTask() {
           subtasks: [{ name: "", isDone: false, id: uuidv4() }],
           status: status ? status[0]?.name : "",
         }}
+        validationSchema={TaskSchema}
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
           // console.log("Values: ", values);
@@ -38,7 +49,7 @@ export default function AddNewTask() {
           window.AddNewTask.close();
         }}
       >
-        {({ values }) => {
+        {({ values, errors }) => {
           return (
             <Form className="flex flex-col gap-y-2">
               {/* =========== TITLE ============= */}
@@ -46,8 +57,17 @@ export default function AddNewTask() {
                 <label className="font-semibold text-slate-500" htmlFor="title">
                   Title
                 </label>
-                <Field className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="title" />
-                <ErrorMessage name="title" />
+                <div className="relative w-full">
+                  <Field
+                    className={twMerge(
+                      "border-2 w-full outline-blue-violet border-slate-300 rounded-md h-9 pl-2",
+                      // errors.title && "border-2 outline-red-400 border-red-400 border-solid"
+                    )}
+                    type="text"
+                    name="title"
+                  />
+                  <ErrorMessage className="absolute right-[10px] top-[6px] font-semibold text-red-400" name="title" component="span" />
+                </div>
               </div>
               {/* =========== DESCRIPTION ============ */}
               <div className="flex flex-col gap-y-2">
@@ -74,11 +94,21 @@ export default function AddNewTask() {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field
-                              className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
-                              type="text"
-                              name={`subtasks.${idx}.name`}
-                            />
+                            <div className="relative w-full">
+                              <Field
+                                className={twMerge(
+                                  "border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2",
+                                  // errors?.subtasks?.[idx]?.name ? "border-2 border-red-400 outline-red-400 border-solid" : ""
+                                )}
+                                type="text"
+                                name={`subtasks.${idx}.name`}
+                              />
+                              <ErrorMessage
+                                className="absolute right-[10px] top-[6px] font-semibold text-red-400"
+                                name={`subtasks.${idx}.name`}
+                                component="span"
+                              />
+                            </div>
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -88,7 +118,6 @@ export default function AddNewTask() {
                               </svg>
                             </button>
                           </div>
-                          <ErrorMessage name="title" />
                         </div>
                       ))}
                       <button
