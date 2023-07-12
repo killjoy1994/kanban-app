@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import { twMerge } from "tailwind-merge";
@@ -22,6 +22,7 @@ export default function AddNewTask() {
   const dispatch = useDispatch();
   const { boards } = useSelector((state) => state.board);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const formikRef = useRef(null);
 
   let status = boards?.find((board) => board.isActive)?.columns;
 
@@ -30,9 +31,18 @@ export default function AddNewTask() {
   // console.log("BOARDS: ", boards);
 
   return (
-    <Modal id="AddNewTask" className={twMerge("py-10 rounded-lg px-8", customScrollbar)}>
+    <Modal
+      id="AddNewTask"
+      className={twMerge("py-10 rounded-lg px-8", customScrollbar)}
+      reset={() => {
+        if (formikRef.current) {
+          formikRef.current.resetForm();
+        }
+      }}
+    >
       <h2 className="mb-4 text-xl font-semibold">Add New Task</h2>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           id: uuidv4(),
           title: "",
@@ -60,8 +70,8 @@ export default function AddNewTask() {
                 <div className="relative w-full">
                   <Field
                     className={twMerge(
-                      "border-2 w-full outline-blue-violet border-slate-300 rounded-md h-9 pl-2",
-                      // errors.title && "border-2 outline-red-400 border-red-400 border-solid"
+                      "border-2 w-full outline-blue-violet border-slate-300 rounded-md h-9 pl-2"
+                      // touched && errors.title && "border-2 outline-red-400 border-red-400 border-solid"
                     )}
                     type="text"
                     name="title"
@@ -97,7 +107,7 @@ export default function AddNewTask() {
                             <div className="relative w-full">
                               <Field
                                 className={twMerge(
-                                  "border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2",
+                                  "border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
                                   // errors?.subtasks?.[idx]?.name ? "border-2 border-red-400 outline-red-400 border-solid" : ""
                                 )}
                                 type="text"

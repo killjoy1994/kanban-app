@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewBoard, setActiveBoard, setActiveNewestBoard } from "../../redux/boardSlice";
@@ -18,10 +18,20 @@ const BoardSchema = Yup.object().shape({
 export default function CreateBoard() {
   const { boards } = useSelector((state) => state.board);
   const dispatch = useDispatch();
+  const formikRef = useRef(null);
+
   return (
-    <Modal id="CreateBoard">
+    <Modal
+      id="CreateBoard"
+      reset={() => {
+        if (formikRef.current) {
+          formikRef.current.resetForm();
+        }
+      }}
+    >
       <h2 className="mb-4 text-xl font-semibold">Add New Board</h2>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           boardName: "",
           columns: [{ name: "", id: uuidv4() }],
@@ -34,7 +44,7 @@ export default function CreateBoard() {
           window.CreateBoard.close();
         }}
       >
-        {({ values }) => (
+        {({ values, resetForm }) => (
           <Form className="flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-2">
               <label className="font-semibold text-slate-500" htmlFor="boardName">

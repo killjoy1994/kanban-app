@@ -1,16 +1,27 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-export default function Modal({ id, children, className, setShowElips }) {
+export default function Modal(props) {
   return (
     <div>
       {/* Open the modal using ID.showModal() method */}
-      <dialog id={id} className={twMerge("modal rounded-md", className)}>
+      <dialog id={props.id} className={twMerge("modal rounded-md", props.className)}>
         <div method="dialog" className="modal-box">
-          {children}
+          {props.children}
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button onClick={() => setShowElips(false)}>close</button>
+          <button
+            onClick={() => {
+              if (props.showElips) {
+                props.setShowElips(false);
+              }
+              if (props.reset) {
+                props.reset();
+              }
+            }}
+          >
+            close
+          </button>
         </form>
       </dialog>
     </div>

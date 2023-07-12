@@ -25,8 +25,9 @@ export default function ElipsDropdown({ parentModal, taskModal, id, show, setSho
               <button
                 onClick={() => {
                   // console.log("ID:", id)
-                  (name !== "Board") && window[parentModal].close();
+                  name !== "Board" && window[parentModal].close();
                   name == "Board" ? window.EditBoard.show() : window[id].showModal();
+                  setShow(false);
                 }}
                 className="text-start text-slate-500 relative z-[999] font-medium hover:text-opacity-80"
               >
@@ -35,8 +36,8 @@ export default function ElipsDropdown({ parentModal, taskModal, id, show, setSho
               <button
                 onClick={() => {
                   onDelete();
-                  (name == "Task") && window[parentModal].close();
-                  (name == "Task") && window[taskModal].close();
+                  name == "Task" && window[parentModal].close();
+                  name == "Task" && window[taskModal].close();
                   setShow(false);
                 }}
                 className="text-start relative z-[999] font-medium text-red-600 hover:text-opacity-80"

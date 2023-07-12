@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -7,7 +7,7 @@ import { editBoard } from "../../redux/boardSlice";
 import * as Yup from "yup";
 
 const BoardSchema = Yup.object().shape({
-  boardName: Yup.string().min(3, "too short!").required("required"),
+  boardName: Yup.string().required("required"),
   columns: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("required"),
@@ -19,10 +19,17 @@ export default function EditBoard() {
   const { boards } = useSelector((state) => state.board);
   const board = boards.find((board) => board.isActive);
   const dispatch = useDispatch();
+  const formikRef = useRef();
   return (
-    <Modal id="EditBoard">
+    <Modal
+      id="EditBoard"
+      reset={() => {
+        formikRef.current && formikRef.current.resetForm();
+      }}
+    >
       <h2 className="mb-4 text-xl font-semibold">Edit Board</h2>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           boardName: board?.name,
           columns: board?.columns,
@@ -39,8 +46,10 @@ export default function EditBoard() {
               <label className="font-semibold text-slate-500" htmlFor="boardName">
                 Name
               </label>
-              <Field className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="boardName" />
-              <ErrorMessage name="boardName" />
+              <div className="relative w-full">
+                <Field className="border-2 w-full border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="boardName" />
+                <ErrorMessage name="boardName" className="absolute right-[10px] top-[6px] font-semibold text-red-400" component="span" />
+              </div>
             </div>
             <div>
               <label className="font-semibold text-slate-500" htmlFor="columns">
@@ -51,14 +60,21 @@ export default function EditBoard() {
                 render={(arrayHelpers) => {
                   return (
                     <div className="flex flex-col gap-y-3">
-                      {values?.columns?.map((task, idx) => (
+                      {values.columns.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field
-                              className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
-                              type="text"
-                              name={`columns.${idx}.name`}
-                            />
+                            <div className="relative w-full">
+                              <Field
+                                className="border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
+                                type="text"
+                                name={`columns.${idx}.name`}
+                              />
+                              <ErrorMessage
+                                name={`columns.${idx}.name`}
+                                className="absolute right-[10px] top-[6px] font-semibold text-red-400"
+                                component="span"
+                              />
+                            </div>
                             {values.columns.length > 1 && (
                               <button type="button" onClick={() => arrayHelpers.remove(idx)}>
                                 <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +86,6 @@ export default function EditBoard() {
                               </button>
                             )}
                           </div>
-                          <ErrorMessage name={`columns.${idx}.name`} component="span" />
                         </div>
                       ))}
                       <button

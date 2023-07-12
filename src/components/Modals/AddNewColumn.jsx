@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewBoard, setActiveNewestBoard, updateColumn } from "../../redux/boardSlice";
@@ -19,11 +19,17 @@ export default function AddColumn() {
   const { boards } = useSelector((state) => state.board);
   let board = boards.find((board) => board.isActive);
   const dispatch = useDispatch();
-  console.log("BOARD: ", board);
+  const formikRef = useRef(null);
   return (
-    <Modal id="AddColumn">
+    <Modal
+      id="AddColumn"
+      reset={() => {
+        formikRef.current && formikRef.current.resetForm();
+      }}
+    >
       <h2 className="mb-4 text-xl font-semibold">Add New Column</h2>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           boardName: board?.name,
           columns: board?.columns,
@@ -71,7 +77,11 @@ export default function AddColumn() {
                                 name={`columns.${idx}.name`}
                                 disabled={idx === 0}
                               />
-                              <ErrorMessage component="span" className="absolute right-[10px] top-[6px] font-semibold text-red-400" name={`columns.${idx}.name`} />
+                              <ErrorMessage
+                                component="span"
+                                className="absolute right-[10px] top-[6px] font-semibold text-red-400"
+                                name={`columns.${idx}.name`}
+                              />
                             </div>
                             {values?.columns?.length > 1 && (
                               <button
