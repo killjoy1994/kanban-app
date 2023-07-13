@@ -24,9 +24,10 @@ export default function Board() {
   }, [boards]);
 
   const onDragEnd = ({ source, destination }) => {
+    console.log("SOURCE: ", source);
+    console.log("DESTINATION: ", destination);
     if (destination == undefined || destination == null) return null;
 
-    // Make sure we're actually moving the item
     if (source.droppableId == destination.droppableId && source.index == destination.index) return null;
 
     // Set start and end variables
@@ -40,7 +41,19 @@ export default function Board() {
       //update state
       dispatch(updateBoardByDragging({ columnId: start.id, data: filteredList }));
     } else {
-      
+      let draggedItem = columns.find((col) => col.id === source.droppableId)?.tasks.find((_, idx) => idx === source.index);
+
+      //update
+      dispatch(
+        updateBoardByDragging({
+          oldColumnId: source.droppableId,
+          columnId: destination.droppableId,
+          taskId: draggedItem.id,
+          draggedItem,
+          sourceIdx: source.index,
+          targetIdx: destination.index,
+        })
+      );
     }
   };
 

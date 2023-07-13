@@ -78,7 +78,21 @@ const boardSlice = createSlice({
     updateBoardByDragging: (state, action) => {
       const board = state.boards.find((board) => board.isActive);
       const colIdx = board.columns.findIndex((col) => col.id === action.payload.columnId);
-      board.columns[colIdx].tasks = action.payload.data;
+      const oldColIdx = board.columns.findIndex((col) => col.id === action.payload?.oldColumnId);
+
+      if (!action.payload.oldColumnId) {
+        // data in same column
+        board.columns[colIdx].tasks = action.payload.data;
+      } else {
+        //data in different column
+        if (!board.columns[colIdx].tasks.length) {
+          board.columns[colIdx].tasks = [action.payload.draggedItem];
+          board.columns[oldColIdx].tasks = board.columns[oldColIdx].tasks.filter(task => task.id !== action.payload.taskId)
+        } else {
+          board.columns[colIdx].tasks.splice(action.payload.targetIdx, 0, action.payload.draggedItem)
+          board.columns[oldColIdx].tasks.splice(action.payload.sourceIdx, 1)
+        }
+      }
     },
 
     updateColumn: (state, action) => {
@@ -134,7 +148,18 @@ const boardSlice = createSlice({
   },
 });
 
-export const { addNewBoard, setActiveBoard, setActiveNewestBoard, editBoard, deleteBoard, updateBoardByDragging, updateColumn, addTask, updateTask, deleteTask, updateCurrentStatus } =
-  boardSlice.actions;
+export const {
+  addNewBoard,
+  setActiveBoard,
+  setActiveNewestBoard,
+  editBoard,
+  deleteBoard,
+  updateBoardByDragging,
+  updateColumn,
+  addTask,
+  updateTask,
+  deleteTask,
+  updateCurrentStatus,
+} = boardSlice.actions;
 
 export default boardSlice.reducer;
