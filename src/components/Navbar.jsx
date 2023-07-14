@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LogoMobile from "../assets/logo-mobile.svg";
 import DarkLogo from "../assets/logo-dark.svg";
+import LightLogo from "../assets/logo-light.svg";
 import DownArrow from "../assets/icon-chevron-down.svg";
 import UpArrow from "../assets/icon-chevron-up.svg";
 import IconAdd from "../assets/icon-add-task-mobile.svg";
@@ -13,19 +14,21 @@ import { deleteBoard, setActiveBoard } from "../redux/boardSlice";
 
 export default function Navbar() {
   const [dotsOpen, setDotsOpen] = useState(false);
-  const { boards } = useSelector((state) => state.board);
+  const { boards, isDarkMode } = useSelector((state) => state.board);
   const selectedBoard = boards?.find((board) => board.isActive);
   const dispatch = useDispatch();
 
+  console.log("DARK", isDarkMode)
+
   return (
     <header className="flex">
-      <div className="pt-8 pb-10 md:w-[300px] pl-8 md:border-r border-b shrink-0 border-opacity-10">
+      <div className="pt-8 pb-10 md:w-[300px] pl-8 md:border-r border-b border-slate-400 shrink-0 border-opacity-10">
         <img className="w-6 h-6 md:hidden" src={LogoMobile} alt="" />
         <div className="hidden md:block ">
-          <img src={DarkLogo} alt="" />
+          <img src={isDarkMode ? LightLogo : DarkLogo} alt="" />
         </div>
       </div>
-      <nav className="flex md:pl-8 pr-8 justify-between items-center w-full border-b md:border-r-slate-500 border-opacity-10">
+      <nav className="flex md:pl-8 pr-8 justify-between items-center w-full border-b border-slate-400 md:border-r-slate-500 border-opacity-10">
         <div className="flex md:hidden">
           <button className="flex text-xl font-bold pl-6">{boards.length == 0 ? "No Board Found" : selectedBoard?.name}</button>
           <span className="flex flex-col justify-center ml-2">
@@ -42,7 +45,7 @@ export default function Navbar() {
                 <img src={IconAdd} alt="" />
               </button>
               <button
-                className="btn hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
+                className="btn border-none hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
                 onClick={() => window.AddNewTask.showModal()}
               >
                 <img className="h-2" src={IconAdd} alt="" />

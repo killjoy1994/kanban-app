@@ -77,7 +77,7 @@ export default function TaskModal({ id, columnId, task }) {
                 return (
                   <div key={idx} className="w-full pl-3 gap-x-3 bg-blue-violet bg-opacity-10 h-8 flex items-center rounded-md">
                     <input onChange={onCheckedHandler} checked={sub.isDone} className="" type="checkbox" name={sub.name} id={sub.name} value={sub.name} />
-                    <label className={twMerge("text-sm w-full font-medium", sub.isDone ? "line-through" : "")} htmlFor={sub.name}>
+                    <label className={twMerge("text-sm w-full cursor-pointer font-medium", sub.isDone ? "line-through" : "")} htmlFor={sub.name}>
                       {sub.name}
                     </label>
                   </div>

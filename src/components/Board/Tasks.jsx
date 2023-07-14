@@ -21,21 +21,24 @@ export default function Tasks({ columnId, columnName, tasks }) {
             ref={provided.innerRef}
             {...provided.droppableProps}
             className={twMerge(
-              "w-[280px] shrink-0 flex flex-col gap-y-5",
-              !(tasks?.length > 0) ? "h-[90%] min-w-[280px] border-dashed border-4 rounded-lg shrink-0" : "h-[90%]"
+              "w-[280px] shrink-0 flex flex-col min-h-[90%] ",
+              !(tasks?.length > 0) ? "min-w-[280px] border-dashed border-4 rounded-lg shrink-0" : "pb-6"
             )}
           >
             {tasks?.map((task, index) => {
               return (
-                <Draggable key={task.id} index={index} draggableId={task.id}>
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                <div key={task.id}>
+                  <Draggable index={index} draggableId={task.id}>
+                    {(provided) => (
                       <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                         onClick={() => {
                           const modalId = `TaskItem${task.id}`;
                           window[modalId].showModal();
                         }}
-                        className="bg-white p-5 w-full rounded-md shadow-lg text-start"
+                        className="bg-white p-5 w-full rounded-md shadow-lg text-start mb-4"
                       >
                         <span className="block font-semibold text-md">{task.title}</span>
                         <span className="block text-sm text-slate-500 font-semibold">
@@ -43,11 +46,11 @@ export default function Tasks({ columnId, columnName, tasks }) {
                           {task.subtasks.filter((sub) => sub.isDone).length} of {task.subtasks?.length} subtasks
                         </span>
                       </div>
-                      <TaskModal id={task.id} columnId={columnId} task={task} />
-                      <EditTask taskModal={`TaskItem${task.id}`} id={task.id} columnId={columnId} />
-                    </div>
-                  )}
-                </Draggable>
+                    )}
+                  </Draggable>
+                  <TaskModal id={task.id} columnId={columnId} task={task} />
+                  <EditTask taskModal={`TaskItem${task.id}`} id={task.id} columnId={columnId} />
+                </div>
               );
             })}
             {/* {provided.placeholder} */}

@@ -9,6 +9,7 @@ const loadedData = JSON.parse(loadedBoards);
 const initialState = {
   boards: loadedData || [],
   showSidebar: true,
+  isDarkMode: false,
   // boards: [],
   // selectedBoard: null,
   // selectedTask: null,
@@ -27,6 +28,9 @@ const boardSlice = createSlice({
         columns,
       };
       state.boards.push(board);
+    },
+    setDarkMode: (state, action) => {
+      state.isDarkMode = action.payload;
     },
     setActiveBoard: (state, action) => {
       // console.log("BOARD PAYLOAD", action.payload);
@@ -165,6 +169,7 @@ export const {
   deleteTask,
   updateCurrentStatus,
   setShowSidebar,
+  setDarkMode,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

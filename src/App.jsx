@@ -10,7 +10,7 @@ function App() {
   const { showSidebar } = useSelector((state) => state.board);
   const dispatch = useDispatch();
   return (
-    <div className="max-w-[1400px] mx-auto">
+    <div className="mx-auto">
       <Navbar />
       <Sidebar />
       <Board />
