@@ -22,7 +22,7 @@ export default function Tasks({ columnId, columnName, tasks }) {
             {...provided.droppableProps}
             className={twMerge(
               "w-[280px] shrink-0 flex flex-col min-h-[90%] ",
-              !(tasks?.length > 0) ? "min-w-[280px] border-dashed border-4 rounded-lg shrink-0" : "pb-6"
+              !(tasks?.length > 0) ? "min-w-[280px] border-dashed border-[3px] dark:border-slate-500 rounded-lg shrink-0" : "pb-6"
             )}
           >
             {tasks?.map((task, index) => {
@@ -38,7 +38,7 @@ export default function Tasks({ columnId, columnName, tasks }) {
                           const modalId = `TaskItem${task.id}`;
                           window[modalId].showModal();
                         }}
-                        className="bg-white p-5 w-full rounded-md shadow-lg text-start mb-4"
+                        className="bg-white p-5 w-full rounded-md shadow-lg dark:bg-slate-800 dark:text-white text-start mb-4"
                       >
                         <span className="block font-semibold text-md">{task.title}</span>
                         <span className="block text-sm text-slate-500 font-semibold">

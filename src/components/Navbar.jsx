@@ -22,13 +22,13 @@ export default function Navbar() {
 
   return (
     <header className="flex">
-      <div className="pt-8 pb-10 md:w-[300px] pl-8 md:border-r border-b border-slate-400 shrink-0 border-opacity-10">
+      <div className="pt-8 pb-10 md:w-[300px] pl-8 md:border-r-2 border-b-2 border-slate-600 shrink-0 border-opacity-10">
         <img className="w-6 h-6 md:hidden" src={LogoMobile} alt="" />
         <div className="hidden md:block ">
           <img src={isDarkMode ? LightLogo : DarkLogo} alt="" />
         </div>
       </div>
-      <nav className="flex md:pl-8 pr-8 justify-between items-center w-full border-b border-slate-400 md:border-r-slate-500 border-opacity-10">
+      <nav className="flex md:pl-8 pr-8 justify-between items-center w-full border-b-2 border-slate-600 border-opacity-10">
         <div className="flex md:hidden">
           <button className="flex text-xl font-bold pl-6">{boards.length == 0 ? "No Board Found" : selectedBoard?.name}</button>
           <span className="flex flex-col justify-center ml-2">
@@ -36,7 +36,7 @@ export default function Navbar() {
           </span>
         </div>
         <div className="hidden md:block">
-          <h1 className="text-2xl font-bold">{boards.length == 0 ? "No Board Found" : selectedBoard?.name}</h1>
+          <h1 className="text-2xl font-bold dark:text-slate-50">{boards.length == 0 ? "No Board Found" : selectedBoard?.name}</h1>
         </div>
         <div className="flex items-center gap-x-2">
           {boards.length !== 0 && (
