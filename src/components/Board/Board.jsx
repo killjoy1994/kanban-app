@@ -60,7 +60,7 @@ export default function Board() {
   return (
     <div
       className={twMerge(
-        "md:ml-[300px] h-[calc(100vh-98px)] overflow-auto  bg-cyan-100 bg-opacity-20 w-full dark:bg-slate-950",
+        "md:ml-[300px] h-[calc(100vh-98px)] overflow-auto  bg-cyan-100 bg-opacity-20 dark:bg-slate-950",
         customScrollbar,
         showSidebar ? "transition duration-500" : "translate-x-[-300px] transition duration-500"
       )}
