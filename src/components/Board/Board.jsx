@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { updateBoardByDragging } from "../../redux/boardSlice";
 
 export default function Board() {
-  const { boards } = useSelector((state) => state.board);
+  const { boards, showSidebar } = useSelector((state) => state.board);
   const selectedBoard = boards?.find((board) => board.isActive);
   const columns = selectedBoard?.columns;
   // console.log("BOARDSS: ", boards);
@@ -58,7 +58,13 @@ export default function Board() {
   };
 
   return (
-    <div className={twMerge("md:ml-[300px] h-[calc(100vh-98px)] overflow-auto  bg-cyan-100 bg-opacity-20", customScrollbar)}>
+    <div
+      className={twMerge(
+        "md:ml-[300px] h-[calc(100vh-98px)] overflow-auto  bg-cyan-100 bg-opacity-20 w-full",
+        customScrollbar,
+        showSidebar ? "transition duration-500" : "translate-x-[-300px] transition duration-500"
+      )}
+    >
       {boards.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="flex px-6 py-5 md:min-w-[100vw] h-full gap-x-5">

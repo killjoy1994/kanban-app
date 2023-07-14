@@ -8,6 +8,7 @@ const loadedData = JSON.parse(loadedBoards);
 
 const initialState = {
   boards: loadedData || [],
+  showSidebar: true,
   // boards: [],
   // selectedBoard: null,
   // selectedTask: null,
@@ -85,12 +86,12 @@ const boardSlice = createSlice({
         board.columns[colIdx].tasks = action.payload.data;
       } else {
         //data in different column
-        if (!board.columns[colIdx].tasks.length) {
+        if (!board.columns[colIdx].tasks) {
           board.columns[colIdx].tasks = [action.payload.draggedItem];
-          board.columns[oldColIdx].tasks = board.columns[oldColIdx].tasks.filter(task => task.id !== action.payload.taskId)
+          board.columns[oldColIdx].tasks = board.columns[oldColIdx].tasks.filter((task) => task.id !== action.payload.taskId);
         } else {
-          board.columns[colIdx].tasks.splice(action.payload.targetIdx, 0, action.payload.draggedItem)
-          board.columns[oldColIdx].tasks.splice(action.payload.sourceIdx, 1)
+          board.columns[colIdx].tasks.splice(action.payload.targetIdx, 0, action.payload.draggedItem);
+          board.columns[oldColIdx].tasks.splice(action.payload.sourceIdx, 1);
         }
       }
     },
@@ -145,6 +146,9 @@ const boardSlice = createSlice({
         updatedCol.tasks = [...updatedCol.tasks, { ...selectedTask, status: updatedCol.name }];
       }
     },
+    setShowSidebar: (state, action) => {
+      state.showSidebar = action.payload;
+    },
   },
 });
 
@@ -160,6 +164,7 @@ export const {
   updateTask,
   deleteTask,
   updateCurrentStatus,
+  setShowSidebar,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

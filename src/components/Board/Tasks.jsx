@@ -22,7 +22,7 @@ export default function Tasks({ columnId, columnName, tasks }) {
             {...provided.droppableProps}
             className={twMerge(
               "w-[280px] shrink-0 flex flex-col gap-y-5",
-              !(tasks?.length > 0) ? "h-[90%] min-w-[280px] border-dashed border-4 rounded-lg shrink-0" : ""
+              !(tasks?.length > 0) ? "h-[90%] min-w-[280px] border-dashed border-4 rounded-lg shrink-0" : "h-[90%]"
             )}
           >
             {tasks?.map((task, index) => {
@@ -50,7 +50,8 @@ export default function Tasks({ columnId, columnName, tasks }) {
                 </Draggable>
               );
             })}
-            <span className="display-[none]">{provided.placeholder}</span>
+            {/* {provided.placeholder} */}
+            <span className="display-[none] h-full">{provided.placeholder}</span>
           </div>
         )}
       </Droppable>
