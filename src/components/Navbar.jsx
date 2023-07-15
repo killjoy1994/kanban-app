@@ -18,7 +18,7 @@ export default function Navbar() {
   const selectedBoard = boards?.find((board) => board.isActive);
   const dispatch = useDispatch();
 
-  console.log("DARK", isDarkMode)
+  console.log("DARK", isDarkMode);
 
   return (
     <header className="flex">
@@ -54,10 +54,27 @@ export default function Navbar() {
               {/* Modal */}
               <AddNewTask />
               <EditBoard />
-              <ElipsDropdown show={dotsOpen} onDelete={() => {
-                dispatch(deleteBoard(selectedBoard.id))
-                dispatch(setActiveBoard(boards[boards.length - 2].id))
-              }} setShow={setDotsOpen} name="Board" />
+              <ElipsDropdown
+                show={dotsOpen}
+                onDelete={() => {
+                  let deleted;
+                  let boardIdx = boards.findIndex((board) => board.isActive);
+
+                  if ((boards.length === 1)) {
+                    deleted = selectedBoard.id;
+                  } else if (boardIdx === boards.length - 1) {
+                    deleted = boards[boards.length - 2].id;
+                  } else {
+                    deleted = boards[boardIdx + 1].id;
+                  }
+
+                  dispatch(deleteBoard(selectedBoard.id));
+                  dispatch(setActiveBoard(deleted));
+                  setDotsOpen((prevState) => !prevState);
+                }}
+                setShow={setDotsOpen}
+                name="Board"
+              />
             </>
           )}
         </div>

@@ -4,9 +4,9 @@ export default function NoBoards() {
   return (
     <div className="flex justify-center items-center h-full">
       <div className="flex flex-col items-center gap-y-3">
-        <p>This board is empty, please create a board to get started!</p>
+        <p className="dark:text-slate-50 text-lg mb-2">This board is empty, please create a board to get started!</p>
         <button
-          className="btn w-52 hidden py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
+          className="btn w-52 hidden border-none py-2.5 px-5 rounded-full md:flex md:items-center gap-x-1 bg-blue-violet hover:bg-blue-violet hover:bg-opacity-80"
           onClick={() => window.CreateBoard.showModal()}
         >
           <span>

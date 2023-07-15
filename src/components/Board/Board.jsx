@@ -19,6 +19,8 @@ export default function Board() {
   // console.log("BOARDSS: ", boards);
   const dispatch = useDispatch();
 
+  console.log("columns: ", columns)
+
   useEffect(() => {
     localStorage.setItem("boards", JSON.stringify(boards));
   }, [boards]);
@@ -68,7 +70,7 @@ export default function Board() {
       {boards.length ? (
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="flex px-6 py-5 md:min-w-[100vw] h-full gap-x-5">
-            {selectedBoard?.columns?.map((column) => {
+            {columns?.map((column) => {
               return <Tasks columnId={column.id} columnName={column.name} key={column.id} tasks={column.tasks} />;
             })}
             <NewColumn />

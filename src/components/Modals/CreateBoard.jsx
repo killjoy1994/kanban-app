@@ -44,7 +44,7 @@ export default function CreateBoard() {
           window.CreateBoard.close();
         }}
       >
-        {({ values, resetForm }) => (
+        {({ values, errors, resetForm }) => (
           <Form className="flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-2">
               <label className="font-semibold text-slate-500" htmlFor="boardName">
