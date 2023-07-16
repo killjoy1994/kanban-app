@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
-import Testmodal from "./Testmodal";
 import ElipsDropdown from "../Elements/ElipsDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import Arrow from "../Elements/Arrow";
