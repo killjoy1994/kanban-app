@@ -43,14 +43,14 @@ export default function AddColumn() {
           window.AddColumn.close();
         }}
       >
-        {({ values }) => (
+        {({ values, errors, touched }) => (
           <Form className="flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-2">
               <label className="font-semibold text-slate-500" htmlFor="boardName">
                 Name
               </label>
               <Field
-                className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2"
+                className="border-2 border-slate-300 outline-blue-violet rounded-[3px] h-9 pl-2"
                 type="text"
                 placeholder={board?.name}
                 name="boardName"
@@ -66,13 +66,16 @@ export default function AddColumn() {
                 name="columns"
                 render={(arrayHelpers) => {
                   return (
-                    <div className="flex flex-col gap-y-3">
+                    <div className="flex flex-col gap-y-3 mt-2">
                       {values?.columns?.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
                             <div className="relative w-full">
                               <Field
-                                className={twMerge("border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2", idx == 0 ? "" : "")}
+                                className={twMerge(
+                                  "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                                  touched?.columns?.[idx]?.name && errors?.columns?.[idx]?.name ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
+                                )}
                                 type="text"
                                 name={`columns.${idx}.name`}
                                 disabled={idx === 0}

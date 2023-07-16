@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { editBoard } from "../../redux/boardSlice";
 import * as Yup from "yup";
+import { twMerge } from "tailwind-merge";
 
 const BoardSchema = Yup.object().shape({
   boardName: Yup.string().required("required"),
@@ -40,14 +41,21 @@ export default function EditBoard() {
           window.EditBoard.close();
         }}
       >
-        {({ values }) => (
+        {({ values, errors, touched }) => (
           <Form className="flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-2">
               <label className="font-semibold text-slate-500" htmlFor="boardName">
                 Name
               </label>
               <div className="relative w-full">
-                <Field className="border-2 w-full border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="boardName" />
+                <Field
+                  className={twMerge(
+                    "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                    touched?.boardName && errors?.boardName ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
+                  )}
+                  type="text"
+                  name="boardName"
+                />
                 <ErrorMessage name="boardName" className="absolute right-[10px] top-[6px] font-semibold text-red-400" component="span" />
               </div>
             </div>
@@ -59,13 +67,16 @@ export default function EditBoard() {
                 name="columns"
                 render={(arrayHelpers) => {
                   return (
-                    <div className="flex flex-col gap-y-3">
+                    <div className="flex flex-col gap-y-3 mt-2">
                       {values.columns.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
                             <div className="relative w-full">
                               <Field
-                                className="border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
+                                className={twMerge(
+                                  "border-2 w-full outline-none rounded-[3px] grow h-9 pl-2",
+                                  touched?.columns?.[idx]?.name && errors?.columns?.[idx]?.name ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
+                                )}
                                 type="text"
                                 name={`columns.${idx}.name`}
                               />

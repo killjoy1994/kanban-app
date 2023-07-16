@@ -7,6 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTask, updateTask } from "../../redux/boardSlice";
 import Arrow from "../Elements/Arrow";
 import { v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
+
+const TaskSchema = Yup.object().shape({
+  title: Yup.string().min(4, "too short!").required("required"),
+  subtasks: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required("required"),
+    })
+  ),
+});
 
 export default function EditTask({ id, columnId, taskModal }) {
   const editModalId = `EditTask${id}`;
@@ -37,17 +47,18 @@ export default function EditTask({ id, columnId, taskModal }) {
           subtasks: task.subtasks,
           status: task.status,
         }}
+        validationSchema={TaskSchema}
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
           console.log("Values: ", values);
-          let updatedColumn
           dispatch(updateTask({ data: values, columnId: column.id, taskId: task.id }));
           resetForm();
           window[editModalId].close();
           window[taskModal].close();
         }}
       >
-        {({ values }) => {
+        {({ values, errors, touched }) => {
+          console.log("HMMM: ", values);
           return (
             <Form className="flex flex-col gap-y-2">
               {/* =========== TITLE ============= */}
@@ -55,8 +66,17 @@ export default function EditTask({ id, columnId, taskModal }) {
                 <label className="font-semibold text-slate-500" htmlFor="title">
                   Title
                 </label>
-                <Field className="border-2 border-slate-300 outline-blue-violet rounded-md h-9 pl-2" type="text" name="title" />
-                <ErrorMessage name="title" />
+                <div className="relative w-full">
+                  <Field
+                    className={twMerge(
+                      "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                      touched.title && errors.title ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
+                    )}
+                    type="text"
+                    name="title"
+                  />
+                  <ErrorMessage className="absolute right-[10px] top-[6px] font-semibold text-red-400" name="title" component="span" />
+                </div>
               </div>
               {/* =========== DESCRIPTION ============ */}
               <div className="flex flex-col gap-y-2">
@@ -83,11 +103,23 @@ export default function EditTask({ id, columnId, taskModal }) {
                       {values.subtasks.map((task, idx) => (
                         <div key={idx}>
                           <div className="flex gap-x-2 items-center">
-                            <Field
-                              className="border-2 border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
-                              type="text"
-                              name={`subtasks.${idx}.name`}
-                            />
+                            <div className="relative w-full">
+                              <Field
+                                className={twMerge(
+                                  "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                                  touched?.subtasks?.[idx]?.name && errors?.subtasks?.[idx]?.name
+                                    ? "border-red-500"
+                                    : "border-slate-300 focus:border-blue-violet"
+                                )}
+                                type="text"
+                                name={`subtasks.${idx}.name`}
+                              />
+                              <ErrorMessage
+                                className="absolute right-[10px] top-[6px] font-semibold text-red-400"
+                                name={`subtasks.${idx}.name`}
+                                component="span"
+                              />
+                            </div>
                             <button type="button" onClick={() => arrayHelper.remove(idx)}>
                               <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
                                 <g fill="#828FA3" fillRule="evenodd">
@@ -97,7 +129,6 @@ export default function EditTask({ id, columnId, taskModal }) {
                               </svg>
                             </button>
                           </div>
-                          <ErrorMessage name="title" />
                         </div>
                       ))}
                       <button

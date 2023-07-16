@@ -59,7 +59,7 @@ export default function AddNewTask() {
           window.AddNewTask.close();
         }}
       >
-        {({ values, errors }) => {
+        {({ values, errors, touched }) => {
           return (
             <Form className="flex flex-col gap-y-2">
               {/* =========== TITLE ============= */}
@@ -70,8 +70,8 @@ export default function AddNewTask() {
                 <div className="relative w-full">
                   <Field
                     className={twMerge(
-                      "border-2 w-full outline-blue-violet border-slate-300 rounded-md h-9 pl-2"
-                      // touched && errors.title && "border-2 outline-red-400 border-red-400 border-solid"
+                      "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                      touched.title && errors.title ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
                     )}
                     type="text"
                     name="title"
@@ -85,7 +85,7 @@ export default function AddNewTask() {
                   Description
                 </label>
                 <Field
-                  className="border-2 border-slate-300 outline-blue-violet rounded-md h-20  pl-2 pt-2 resize-none"
+                  className="border-2 border-slate-300 outline-blue-violet rounded-[3px] h-20  pl-2 pt-2 resize-none"
                   as="textarea"
                   type="text"
                   name="description"
@@ -107,8 +107,8 @@ export default function AddNewTask() {
                             <div className="relative w-full">
                               <Field
                                 className={twMerge(
-                                  "border-2 w-full border-slate-300 outline-blue-violet rounded-md grow h-9 pl-2"
-                                  // errors?.subtasks?.[idx]?.name ? "border-2 border-red-400 outline-red-400 border-solid" : ""
+                                  "border-2 w-full  outline-none  rounded-[3px] h-9 pl-2",
+                                  touched?.subtasks?.[idx]?.name && errors?.subtasks?.[idx]?.name ? "border-red-500" : "border-slate-300 focus:border-blue-violet"
                                 )}
                                 type="text"
                                 name={`subtasks.${idx}.name`}
@@ -151,7 +151,7 @@ export default function AddNewTask() {
                 </label>
                 <div className="relative w-full">
                   <Field
-                    className="w-full relative border-2 border-slate-300 appearance-none bg-transparent outline-blue-violet rounded-md h-9 pl-2"
+                    className="w-full relative border-2 border-slate-300 appearance-none bg-transparent outline-blue-violet rounded-[3px] h-9 pl-2"
                     as="select"
                     name="status"
                     id="status"
